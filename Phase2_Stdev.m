@@ -36,6 +36,7 @@ for i = 1 : size(userNums, 1)
     forkEatStandard_DeviationEMG = std(EMG_Fork_Eat);
     forkEatStandard_DeviationIMU = std(IMU_Fork_Eat);
     Fork_Eat_Data = [forkEatStandard_DeviationIMU,forkEatStandard_DeviationEMG];
+    Fork_Eat_Data = normalize(Fork_Eat_Data);
     % Saves the data to the path
     save(fullfile(outputPath, strcat(userNums(i,:),'_','Fork_Eat.mat')),'Fork_Eat_Data');
 
@@ -48,6 +49,7 @@ for i = 1 : size(userNums, 1)
     forkNotEatStandard_DeviationEMG = std(EMG_Fork_NotEat);
     forkNotEatStandard_DeviationIMU = std(IMU_Fork_NotEat);
     Fork_NotEat_Data = [forkNotEatStandard_DeviationIMU,forkNotEatStandard_DeviationEMG];
+    Fork_NotEat_Data = normalize(Fork_NotEat_Data);
     % Saves the data to the path
     save(fullfile(outputPath, strcat(userNums(i,:),'_','Fork_NotEat.mat')),'Fork_NotEat_Data');
 
@@ -60,6 +62,7 @@ for i = 1 : size(userNums, 1)
     userSpoonEatEMG = std(EMG_Spoon_Eat);
     userSpoonEatIMU = std(IMU_Spoon_Eat);
     Spoon_Eat_Data = [userSpoonEatIMU,userSpoonEatEMG];
+    Spoon_Eat_Data = normalize(Spoon_Eat_Data);
     % Saves the data to the path
     save(fullfile(outputPath, strcat(userNums(i,:),'_','Spoon_Eat.mat')),'Spoon_Eat_Data');
 
@@ -72,6 +75,7 @@ for i = 1 : size(userNums, 1)
     userSpoonNotEatEMG = std(EMG_Spoon_NotEat);
     userSpoonNotEatIMU = std(IMU_Spoon_NotEat);
     Spoon_NotEat_Data = [userSpoonNotEatIMU,userSpoonNotEatEMG];
+    Spoon_NotEat_Data = normalize(Spoon_NotEat_Data);
     % Saves the data to the path
     save(fullfile(outputPath, strcat(userNums(i,:),'_','Spoon_NotEat.mat')),'Spoon_NotEat_Data');
     

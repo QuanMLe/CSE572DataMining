@@ -65,30 +65,32 @@ columnTitles = ["ori_x","ori_y","ori_z","ori_w","accel_x","accel_y","accel_z","g
 % % Writes out data for graphs to be made in csv
 % writetable(T,strcat(outputPath,'\Fork_NotEat_Min_Data.csv'))
 
+
 % Saves figure for orientation data on every user
 
-x_axis = categorical(users);
-y_axis = forkMinEatData(1:30,1:4);
-orientationGraph = bar(x_axis,y_axis);
-filename = strcat(outputPath,'\ForkEatOrientationGraph.png');
-savefig(strcat(outputPath,'\ForkEatOrientationGraph.fig'));
-% Saves figure for acceleration data on every user
-x_axis = categorical(users);
-y_axis = forkMinEatData(1:30,5:7);
-accelerationGraph = bar(x_axis,y_axis);
-savefig(strcat(outputPath,'\ForkEatAccelerationGraph.fig'));
-
-% Saves figure for gyro data on every user
-x_axis = categorical(users);
-y_axis = forkMinEatData(1:30,8:10);
-gyroGraph = bar(x_axis,y_axis);
-savefig(strcat(outputPath,'\ForkEatGyroGraph.fig'));
-
-% Saves figure for gyro data on every user
-x_axis = categorical(users);
-y_axis = forkMinEatData(1:30,11:18);
-emgGraph = bar(x_axis,y_axis);
-savefig(strcat(outputPath,'\ForkEatEMGGraph.fig'));
-fprintf("Graphs were created");
+% x_axis = categorical(users);
+% y_axis = forkMinEatData(1:30,1:4);
+% orientationGraph = bar(x_axis,y_axis);
+% filename = strcat(outputPath,'\ForkEatOrientationGraph.png');
+% savefig(strcat(outputPath,'\ForkEatOrientationGraph.fig'));
+% 
+% % Saves figure for acceleration data on every user
+% x_axis = categorical(users);
+% y_axis = forkMinEatData(1:30,5:7);
+% accelerationGraph = bar(x_axis,y_axis);
+% savefig(strcat(outputPath,'\ForkEatAccelerationGraph.fig'));
+% 
+% % Saves figure for gyro data on every user
+% x_axis = categorical(users);
+% y_axis = forkMinEatData(1:30,8:10);
+% gyroGraph = bar(x_axis,y_axis);
+% savefig(strcat(outputPath,'\ForkEatGyroGraph.fig'));
+% 
+% % Saves figure for gyro data on every user
+% x_axis = categorical(users);
+% y_axis = forkMinEatData(1:30,11:18);
+% emgGraph = bar(x_axis,y_axis);
+% savefig(strcat(outputPath,'\ForkEatEMGGraph.fig'));
+% fprintf("Graphs were created");
 
 

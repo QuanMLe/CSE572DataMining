@@ -23,6 +23,7 @@ inputList = cellstr(inputList);
 userNums = ls(myoPath);
 userNums = userNums(3:end,:);
 
+
 %Loop that runs through the files and gets the SVD
 for i = 1 : size(userNums, 1)
     % Gets file names for fork eating data
@@ -31,13 +32,24 @@ for i = 1 : size(userNums, 1)
     % Loads variables from .mat files
     load(strcat(dataPath,'\',userForkEat{1}));
     load(strcat(dataPath,'\',userForkEat{2}));
+    
+    % I do padding in the IMU because EMG has more elements
+    diffRow = abs(length(IMU_Fork_Eat)-length(EMG_Fork_Eat));
+    if (length(IMU_Fork_Eat) > length(EMG_Fork_Eat))
+        padding = zeros(diffRow,size(EMG_Fork_Eat,2));
+        EMG_Fork_Eat = [EMG_Fork_Eat;padding];
+    else
+        padding = zeros(diffRow,size(IMU_Fork_Eat,2));
+        IMU_Fork_Eat = [IMU_Fork_Eat;padding];
+    end
+ 
     % Does SVD calculations, I then do the sum function to flatten the matrix
     % so the diagonal values are saved in a smaller format.
-    [U,S,V] = svd(EMG_Fork_Eat);
-    forkEatSVDEMG = sum(S);
-    [U,S,V] = svd(IMU_Fork_Eat);
-    forkEatSVDIMU = sum(S);
-    Fork_Eat_Data = [forkEatSVDIMU,forkEatSVDEMG];
+    
+    Fork_Eat_Data = [IMU_Fork_Eat EMG_Fork_Eat];
+    Fork_Eat_Data = normalize(Fork_Eat_Data);
+    [U,S,V] = svd(Fork_Eat_Data);
+    Fork_Eat_Data = sum(S);
     % Saves the data to the path
     save(fullfile(outputPath, strcat(userNums(i,:),'_','Fork_Eat.mat')),'Fork_Eat_Data');
     
@@ -46,12 +58,22 @@ for i = 1 : size(userNums, 1)
     % Loads variables from .mat files
     load(strcat(dataPath,'\',userForkNotEat{1}));
     load(strcat(dataPath,'\',userForkNotEat{2}));
+    
+    % I do padding in the IMU because EMG has more elements
+    diffRow = abs(length(IMU_Fork_NotEat)-length(EMG_Fork_NotEat));
+    if (length(IMU_Fork_NotEat) > length(EMG_Fork_NotEat))
+        padding = zeros(diffRow,size(EMG_Fork_NotEat,2));
+        EMG_Fork_NotEat = [EMG_Fork_NotEat;padding];
+    else
+        padding = zeros(diffRow,size(IMU_Fork_NotEat,2));
+        IMU_Fork_NotEat = [IMU_Fork_NotEat;padding];
+    end
+    
     % Does SVD calculations
-    [U,S,V] = svd(EMG_Fork_NotEat);
-    forkNotEatSVDEMG = sum(S);
-    [U,S,V] = svd(IMU_Fork_NotEat);
-    forkNotEatSVDIMU = sum(S);
-    Fork_NotEat_Data = [forkNotEatSVDIMU,forkNotEatSVDEMG];
+    Fork_NotEat_Data = [IMU_Fork_NotEat EMG_Fork_NotEat];
+    Fork_NotEat_Data = normalize(Fork_NotEat_Data);
+    [U,S,V] = svd(Fork_NotEat_Data);
+    Fork_NotEat_Data = sum(S);
     % Saves the data to the path
     save(fullfile(outputPath, strcat(userNums(i,:),'_','Fork_NotEat.mat')),'Fork_NotEat_Data');
 
@@ -60,12 +82,22 @@ for i = 1 : size(userNums, 1)
     % Loads variables from .mat files
     load(strcat(dataPath,'\',userSpoonEat{1}));
     load(strcat(dataPath,'\',userSpoonEat{2}));
+    
+    % I do padding in the IMU because EMG has more elements
+    diffRow = abs(length(IMU_Spoon_Eat)-length(EMG_Spoon_Eat));
+    if (length(IMU_Spoon_Eat) > length(EMG_Spoon_Eat))
+        padding = zeros(diffRow,size(EMG_Spoon_Eat,2));
+        EMG_Spoon_Eat = [EMG_Spoon_Eat;padding];
+    else
+        padding = zeros(diffRow,size(IMU_Spoon_Eat,2));
+        IMU_Spoon_Eat = [IMU_Spoon_Eat;padding];
+    end
+    
     % Does SVD calculations
-    [U,S,V] = svd(EMG_Spoon_Eat);
-    userSpoonEatEMG = sum(S);
-    [U,S,V] = svd(IMU_Spoon_Eat);
-    userSpoonEatIMU = sum(S);
-    Spoon_Eat_Data = [userSpoonEatIMU,userSpoonEatEMG];
+    Spoon_Eat_Data = [IMU_Spoon_Eat EMG_Spoon_Eat];
+    Spoon_Eat_Data = normalize(Spoon_Eat_Data);
+    [U,S,V] = svd(Spoon_Eat_Data);
+    Spoon_Eat_Data = sum(S);
     % Saves the data to the path
     save(fullfile(outputPath, strcat(userNums(i,:),'_','Spoon_Eat.mat')),'Spoon_Eat_Data');
 
@@ -74,7 +106,23 @@ for i = 1 : size(userNums, 1)
     % Loads variables from .mat files
     load(strcat(dataPath,'\',userSpoonNotEat{1}));
     load(strcat(dataPath,'\',userSpoonNotEat{2}));
+    
+    % I do padding in the IMU because EMG has more elements
+    diffRow = abs(length(IMU_Spoon_NotEat)-length(EMG_Spoon_NotEat));
+    if (length(IMU_Spoon_NotEat) > length(EMG_Spoon_NotEat))
+        padding = zeros(diffRow,size(EMG_Spoon_NotEat,2));
+        EMG_Spoon_NotEat = [EMG_Spoon_NotEat;padding];
+    else
+        padding = zeros(diffRow,size(IMU_Spoon_NotEat,2));
+        IMU_Spoon_NotEat = [IMU_Spoon_NotEat;padding];
+    end
+    
     % Does SVD calculations
+    Spoon_NotEat_Data = [IMU_Spoon_NotEat EMG_Spoon_NotEat];
+    Spoon_NotEat_Data = normalize(Spoon_NotEat_Data);
+    [U,S,V] = svd(Spoon_NotEat_Data);
+    Spoon_NotEat_Data = sum(S);
+    
     [U,S,V] = svd(EMG_Spoon_NotEat);
     userSpoonNotEatEMG = sum(S);
     [U,S,V] = svd(IMU_Spoon_NotEat);
@@ -84,4 +132,4 @@ for i = 1 : size(userNums, 1)
     save(fullfile(outputPath, strcat(userNums(i,:),'_','Spoon_NotEat.mat')),'Spoon_NotEat_Data');
 
 end
-display('SVD has been calculated');
+disp('SVD has been calculated');
