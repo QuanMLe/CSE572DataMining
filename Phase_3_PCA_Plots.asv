@@ -1,0 +1,17 @@
+scriptPath = pwd;
+dataPath = strcat(scriptPath,'\Phase_2_Data\PCA');
+inputList = ls(dataPath);
+% Removes the '.' and '..' directories from list
+inputList = inputList(3:end,:);
+
+%Converts inputList into a cell array of character vectors
+inputList = cellstr(inputList);
+
+load(strcat(dataPath,'\',inputList{1}));
+load(strcat(dataPath,'\',inputList{2}));
+load(strcat(dataPath,'\',inputList{3}));
+load(strcat(dataPath,'\',inputList{4}));
+
+plot(Users_Fork_Eat_Coeffs);
+
+x = [Acceleration Displacement Horsepower MPG Weight];

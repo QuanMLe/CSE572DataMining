@@ -124,6 +124,18 @@ for i = 1 : size(userNums, 1)
     Users_Spoon_NotEat_Data = [Users_Fork_NotEat_Data;Spoon_NotEat_Data];
     
 end
+% Saves the data before calling PCA function
+Users_Fork_Eat_Content = Users_Fork_Eat_Data;
+Users_Fork_NotEat_Content = Users_Fork_NotEat_Data;
+Users_Spoon_Eat_Content = Users_Spoon_Eat_Data;
+Users_Spoon_NotEat_Content = Users_Spoon_NotEat_Data;
+
+save(fullfile(outputPath,'Fork_Eat_Content.mat'),'Users_Fork_Eat_Content');
+save(fullfile(outputPath,'Fork_NotEat_Content.mat'),'Users_Fork_NotEat_Content');
+save(fullfile(outputPath,'Spoon_Eat_Content.mat'),'Users_Spoon_Eat_Content');
+save(fullfile(outputPath,'Spoon_NotEat_Content.mat'),'Users_Spoon_NotEat_Content');
+
+
 Users_Fork_Eat_Coeffs = pca(Users_Fork_Eat_Data);
 Users_Fork_NotEat_Coeffs = pca(Users_Fork_NotEat_Data);
 Users_Spoon_Eat_Coeffs = pca(Users_Spoon_Eat_Data);
