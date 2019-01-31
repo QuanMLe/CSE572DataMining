@@ -7,7 +7,11 @@ dataPath = strcat(scriptPath,'\Phase_2_Data\SVD');
 inputList = ls(dataPath);
 
 outputPath = strcat(scriptPath,'\Phase_2_Data\Graphs\SVD');
+phase3DataPathEat = strcat(scriptPath,'\Phase_3_Data\Eat');
+phase3DataPathNotEat = strcat(scriptPath,'\Phase_3_Data\Not_Eat');
 mkdir(outputPath);
+mkdir(phase3DataPathEat);
+mkdir(phase3DataPathNotEat);
 
 %Path to Myo Data
 myoPath = strcat(scriptPath,'\MyoData');
@@ -44,6 +48,10 @@ forkEatFeatureMatrix = Users_Fork_Eat_Content * Users_Fork_Eat_Coeffs;
 forkNotEatFeatureMatrix = Users_Fork_NotEat_Content * Users_Fork_NotEat_Coeffs;
 spoonEatFeatureMatrix = Users_Spoon_Eat_Content * Users_Spoon_Eat_Coeffs;
 spoonNotEatFeatureMatrix = Users_Spoon_NotEat_Content * Users_Spoon_NotEat_Coeffs;
+
+%Saves the data for later use in Phase III
+save(fullfile(phase3DataPathEat, strcat('\Fork_SVD_Eat.mat')),'forkEatFeatureMatrix');
+save(fullfile(phase3DataPathNotEat, strcat('\Fork_SVD_NotEat.mat')),'forkNotEatFeatureMatrix');
 
 users = [];
 

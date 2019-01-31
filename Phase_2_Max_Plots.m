@@ -10,7 +10,11 @@ dataPath = strcat(scriptPath,'\Phase_2_Data\Max');
 myoPath = strcat(scriptPath,'\MyoData');
 % Path where the graph files will be written out
 outputPath = strcat(scriptPath,'\Phase_2_Data\Graphs\Max');
+phase3DataPathEat = strcat(scriptPath,'\Phase_3_Data\Eat');
+phase3DataPathNotEat = strcat(scriptPath,'\Phase_3_Data\Not_Eat');
 mkdir(outputPath);
+mkdir(phase3DataPathEat);
+mkdir(phase3DataPathNotEat);
 
 % Gets the data from the min folder of phase II
 inputList = ls(dataPath);
@@ -49,12 +53,13 @@ for i = 1 : size(userNums, 1)
     % Adds the users to a string array for later use
     users = [users;convertCharsToStrings(userNums(i,:))];
 end
+%Saves the data for later use in Phase III
+save(fullfile(phase3DataPathEat, strcat('\Fork_Max_Eat.mat')),'forkMaxEatData');
+save(fullfile(phase3DataPathNotEat, strcat('\Fork_Max_NotEat.mat')),'forkMaxNotEatData');
 
 columnTitles = ["ori_x","ori_y","ori_z","ori_w","accel_x","accel_y","accel_z","gyro_x","gyro_y","gyro_z","emg_1","emg_2","emg_3","emg_4","emg_5","emg_6","emg_7","emg_8"];
 users = categorical(users);
 labels = ["Eating Data", "Non-Eating Data"];
-
-
 
 for i = 1 : size(forkMaxEatData, 1)
     ori_z_eat = forkMaxEatData(:,i);
