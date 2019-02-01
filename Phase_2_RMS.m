@@ -47,7 +47,7 @@ for i = 1 : size(userNums, 1)
     % so the diagonal values are saved in a smaller format.
     
     Fork_Eat_Data = [IMU_Fork_Eat EMG_Fork_Eat];
-    Fork_Eat_Data = normalize(Fork_Eat_Data);
+%     Fork_Eat_Data = normalize(Fork_Eat_Data);
     Fork_Eat_Data = rms(Fork_Eat_Data);
     % Saves the data to the path
     save(fullfile(outputPath, strcat(userNums(i,:),'_','Fork_Eat.mat')),'Fork_Eat_Data');
@@ -70,7 +70,7 @@ for i = 1 : size(userNums, 1)
     
     % Does RMS calculations
     Fork_NotEat_Data = [IMU_Fork_NotEat EMG_Fork_NotEat];
-    Fork_NotEat_Data = normalize(Fork_NotEat_Data);
+%     Fork_NotEat_Data = normalize(Fork_NotEat_Data);
     Fork_NotEat_Data = rms(Fork_NotEat_Data);
     % Saves the data to the path
     save(fullfile(outputPath, strcat(userNums(i,:),'_','Fork_NotEat.mat')),'Fork_NotEat_Data');
@@ -93,7 +93,7 @@ for i = 1 : size(userNums, 1)
     
     % Does RMS calculations
     Spoon_Eat_Data = [IMU_Spoon_Eat EMG_Spoon_Eat];
-    Spoon_Eat_Data = normalize(Spoon_Eat_Data);
+%     Spoon_Eat_Data = normalize(Spoon_Eat_Data);
     Spoon_Eat_Data  = rms(Spoon_Eat_Data);
     % Saves the data to the path
     save(fullfile(outputPath, strcat(userNums(i,:),'_','Spoon_Eat.mat')),'Spoon_Eat_Data');
@@ -116,7 +116,7 @@ for i = 1 : size(userNums, 1)
     
     % Does RMS calculations
     Spoon_NotEat_Data = [IMU_Spoon_NotEat EMG_Spoon_NotEat];
-    Spoon_NotEat_Data = normalize(Spoon_NotEat_Data);
+%     Spoon_NotEat_Data = normalize(Spoon_NotEat_Data);
     Spoon_NotEat_Data = rms(Spoon_NotEat_Data);
     
     % Saves the data to the path
