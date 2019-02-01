@@ -42,6 +42,8 @@ forkNotEatFFT = abs(fft(Users_Fork_NotEat_Content));
 % forkNotEatFFT = norm(forkNotEatFFT);
 % [forkNotEatFFT,forkEatIndices] = (sort(forkNotEatFFT,'descend'));
 % forkNotEatFFT = forkNotEatFFT(:,1:5);
+save(fullfile(phase3DataPathEat, strcat('\Fork_FFT_Eat.mat')),'forkEatFFT');
+save(fullfile(phase3DataPathNotEat, strcat('\Fork_FFT_NotEat.mat')),'forkNotEatFFT');
 
 columnTitles = ["ori_x","ori_y","ori_z","ori_w","accel_x","accel_y","accel_z","gyro_x","gyro_y","gyro_z","emg_1","emg_2","emg_3","emg_4","emg_5","emg_6","emg_7","emg_8"];
 legend(columnTitles);

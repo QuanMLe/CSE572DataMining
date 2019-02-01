@@ -1,49 +1,60 @@
-clear all 
-clc
+clear all
 close all
+clc
 
+% This call gets the path of the folder that the script that is running
 scriptPath = pwd;
-dataPath = strcat(scriptPath,'\Phase_2_Data\PCA');
-inputList = ls(dataPath);
-
-outputPath = strcat(scriptPath,'\Phase_2_Data\Graphs\PCA');
-mkdir(outputPath);
-
+% This will work if the Phase I data is in the same directory as the script
+dataPathEat = strcat(scriptPath,'\Phase_3_Data\','Eat');
+dataPathNotEat = strcat(scriptPath,'\Phase_3_Data\','Not_Eat');
 %Path to Myo Data
 myoPath = strcat(scriptPath,'\MyoData');
+% Path where the PCA files will be written out
+outputPath = strcat(scriptPath,'\Phase_3_Data\PCA');
+mkdir(outputPath);
+
+forkEatList = ls(dataPathEat);
+forkNotEatList = ls(dataPathNotEat);
 % Removes the '.' and '..' directories from list
-inputList = inputList(3:end,:);
+forkEatList = forkEatList(3:end,:);
+forkNotEatList = forkNotEatList(3:end,:);
 
 %Converts inputList into a cell array of character vectors
-inputList = cellstr(inputList);
-%Loads coeffs and content from files
-coeffsData = inputList(contains(inputList,'Coeffs'));
-contentData = inputList(contains(inputList,'Content'));
+forkEatList = cellstr(forkEatList);
+forkNotEatList = cellstr(forkNotEatList);
+
+%Uses a loop to concat all the data
+for i = 1 : size(forkEatList, 1)
+    load(strcat(dataPathEat,'\',forkEatList{i}));
+    load(strcat(dataPathNotEat,'\',forkNotEatList{i}));
+end
+
+% minOriMatrix = [forkMinEatData(:,1:4) forkMaxEatData(:,1:4) forkMeanEatData(:,1:4) forkStdevEatData(:,1:4) forkEatFeatureMatrix(:,1:4)];
+% [coeff,scores,latent] = pca(minOriMatrix);
+% minFeatureSpace = minOriMatrix*coeff;
+% maxMatrix = [];
+% meanMatrix = [];
+% StdevMatrix = [];
+% SVDMatrix = [];
+
+% Combines all the features in this order Min, Max, Mean, Stdev, SVD in
+% I do this twice for eat and not eat
+
+Combined_Eat_Matrix = [forkMinEatData  forkMaxEatData  forkMeanEatData  forkStdevEatData  forkEatFFT];
+[coeffEat,scoreEat] = pca(Combined_Eat_Matrix.');
+transMatrix = Combined_Eat_Matrix.';
+newEatFeatureSpace = transMatrix*coeffEat;
+newEatFeatureSpace = newEatFeatureSpace.';
+
+Combined_NotEat_Matrix = [forkMinNotEatData forkMaxNotEatData forkMeanNotEatData forkStdevNotEatData forkNotEatFFT];
+[coeffNotEat,scoreNotEat] = pca(Combined_NotEat_Matrix.');
+transMatrix = Combined_NotEat_Matrix.';
+newNotEatFeatureSpace = transMatrix*coeffNotEat;
+newNotEatFeatureSpace = newNotEatFeatureSpace.';
 
 % This is for keeping track of the the user number when we write out files
 userNums = ls(myoPath);
 userNums = userNums(3:end,:);
-
-load(strcat(dataPath,'\',coeffsData{1}));
-load(strcat(dataPath,'\',coeffsData{2}));
-load(strcat(dataPath,'\',coeffsData{3}));
-load(strcat(dataPath,'\',coeffsData{4}));
-
-load(strcat(dataPath,'\',contentData{1}));
-load(strcat(dataPath,'\',contentData{2}));
-load(strcat(dataPath,'\',contentData{3}));
-load(strcat(dataPath,'\',contentData{4}));
-
-columnTitles = ["ori_x","ori_y","ori_z","ori_w","accel_x","accel_y","accel_z","gyro_x","gyro_y","gyro_z","emg_1","emg_2","emg_3","emg_4","emg_5","emg_6","emg_7","emg_8"];
-legend(columnTitles);
-
-% plot(Users_Fork_Eat_Coeffs);
-
-
-forkEatFeatureMatrix = Users_Fork_Eat_Content * Users_Fork_Eat_Coeffs;
-forkNotEatFeatureMatrix = Users_Fork_NotEat_Content * Users_Fork_NotEat_Coeffs;
-spoonEatFeatureMatrix = Users_Spoon_Eat_Content * Users_Spoon_Eat_Coeffs;
-spoonNotEatFeatureMatrix = Users_Spoon_NotEat_Content * Users_Spoon_NotEat_Coeffs;
 
 users = [];
 
@@ -52,20 +63,6 @@ for i = 1 : size(userNums, 1)
     users = [users;convertCharsToStrings(userNums(i,:))];
 end
 
-users = categorical(users);
-labels = ["Eating Data", "Non-Eating Data"];
-
-for i = 1 : size(forkEatFeatureMatrix, 1)
-    ori_z_eat = forkEatFeatureMatrix(:,i);
-    ori_z_not_eat = forkNotEatFeatureMatrix(:,i);
-    fig = plot(users,ori_z_eat,'r-');
-    hold on;
-    fig = plot(users,ori_z_not_eat,'b-');
-    title(strcat(upper(columnTitles{i}), " PCA"));
-    legend(labels);
-    legend('Location', 'eastoutside');
-    set(gcf, 'Units', 'Normalized', 'OuterPosition', [0, 0.04, 1, 0.96]);
-    hold off;
-    savepath = strcat(outputPath,"\",columnTitles{i},"_pca.png");
-    saveas(fig,savepath,'png'); 
-end
+figure1 = biplot(coeffEat(:,1:3),'Scores',scoreEat(:,1:3),'Varlabels', users);
+figure();
+figure2 = biplot(coeffNotEat(:,1:3),'Scores',scoreNotEat(:,1:3),'Varlabels', users);
