@@ -33,13 +33,13 @@ load(strcat(dataPath,'\',contentData{2}));
 load(strcat(dataPath,'\',contentData{3}));
 load(strcat(dataPath,'\',contentData{4}));
 
-forkEatFFT = abs(fft(Users_Fork_Eat_Content));
-% forkEatFFT = norm(forkEatFFT);
+forkEatFFT = fft(Users_Fork_Eat_Content);
+
 % forkEatFFT = sort(forkEatFFT,'descend');
 % forkEatFFT = forkEatFFT(:,1:5);
 
-forkNotEatFFT = abs(fft(Users_Fork_NotEat_Content));
-% forkNotEatFFT = norm(forkNotEatFFT);
+forkNotEatFFT = fft(Users_Fork_Eat_Content);
+
 % [forkNotEatFFT,forkEatIndices] = (sort(forkNotEatFFT,'descend'));
 % forkNotEatFFT = forkNotEatFFT(:,1:5);
 
@@ -56,13 +56,13 @@ end
 users = categorical(users);
 labels = ["Eating Data", "Non-Eating Data"];
 
-for i = 1 : size(forkEatFFT, 1)
-    ori_z_eat = forkEatFFT(:,i);
-    ori_z_not_eat = forkNotEatFFT(:,i);
+for i = 1 : size(forkMinEatData, 1)
+    ori_z_eat = forkMinEatData(:,i);
+    ori_z_not_eat = forkMinNotEatData(:,i);
     fig = plot(users,ori_z_eat,'r-');
     hold on;
     fig = plot(users,ori_z_not_eat,'b-');
-    title(strcat(upper(columnTitles{i}), " FFT"));
+    title(strcat(upper(columnTitles{i}), " Min"));
     legend(labels);
     legend('Location', 'eastoutside');
     set(gcf, 'Units', 'Normalized', 'OuterPosition', [0, 0.04, 1, 0.96]);
