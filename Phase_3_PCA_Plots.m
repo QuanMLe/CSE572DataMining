@@ -41,19 +41,21 @@ end
 % I do this twice for eat and not eat
 
 Combined_Eat_Matrix = [forkMinEatData  forkMaxEatData  forkMeanEatData  forkStdevEatData  forkEatFFT];
-[coeffEat,scoreEat] = pca(Combined_Eat_Matrix,'Economy',false);
+[coeffEat,scoreEat,latentEat] = pca(Combined_Eat_Matrix,'Economy',false);
 newEatFeatureSpace = Combined_Eat_Matrix*coeffEat;
 
 top_5_coeff_eat = coeffEat(:,1:5);
 save(fullfile(outputPath,'top_5_coeff_eat.mat'),'top_5_coeff_eat');
+save(fullfile(outputPath,'latentEat.mat'),'latentEat');
 save(fullfile(outputPath,'coeffEat.mat'),'coeffEat');
 
 Combined_NotEat_Matrix = [forkMinNotEatData forkMaxNotEatData forkMeanNotEatData forkStdevNotEatData forkNotEatFFT];
-[coeffNotEat,scoreNotEat] = pca(Combined_NotEat_Matrix,'Economy',false);
+[coeffNotEat,scoreNotEat,latentNotEat] = pca(Combined_NotEat_Matrix,'Economy',false);
 newNotEatFeatureSpace = Combined_NotEat_Matrix*coeffNotEat;
 
 top_5_coeff_not_eat = coeffNotEat(:,1:5);
 save(fullfile(outputPath,'top_5_coeff_not_eat.mat'),'top_5_coeff_not_eat');
+save(fullfile(outputPath,'latentNotEat.mat'),'latentNotEat');
 save(fullfile(outputPath,'coeffNotEat.mat'),'coeffNotEat');
 
 % This is for keeping track of the the user number when we write out files
