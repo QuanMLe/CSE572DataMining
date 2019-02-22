@@ -1,0 +1,80 @@
+clear all
+close all
+clc
+
+% This call gets the path of the folder that the script that is running
+script_path = pwd;
+data_path = strcat(script_path,'\Phase_1');
+
+% Path where the PCA files will be written out
+outputPath = strcat(data_path,'\Graphs');
+mkdir(outputPath);
+
+% Fetches file names from myoData
+user_list = ls(script_path);
+fork_data_files = ls(data_path);
+
+% Removes the '.' and '..' directories from list
+user_list = user_list(3:end,:);
+fork_data_files = fork_data_files(3:end,:);
+
+% Converts inputList into a cell array of character vectors
+user_list = cellstr(user_list);
+fork_data_files = cellstr(fork_data_files);
+
+% Finds only the user files
+user_list = user_list(contains(user_list,'user'));
+
+% Finds only the .mat files
+fork_data_files = fork_data_files(contains(fork_data_files,'.mat'));
+
+data_table = [];
+for i = 1 : size(fork_data_files, 1)
+    load(strcat(data_path,'\',fork_data_files{i}));
+    data_table = [data_table;user_data_table(2,:)];
+end
+
+% Converts data to double and creates a table
+data_table = str2double(data_table);
+row_names = user_list';
+col_names = {'Precision_SVM', 'Recall_SVM', 'F_Score_SVM', 'Precision_DT', 'Recall_DT', 'F_Score_DT',...
+'Precision_NN', 'Recall_NN', 'F_Score_NN'};
+data_table = array2table(data_table, 'RowNames',row_names ,'VariableNames' ,col_names);
+
+x = categorical(row_names);
+hold on;
+
+% Graphs across all users
+for i = 1 : length(col_names)
+    y = data_table.(i);
+    fig = plot(x, y); 
+end
+
+% Sets title and legend
+title("Overall Data Across Users");
+legend('Precision\_SVM', 'Recall\_SVM', 'F\_Score\_SVM', 'Precision\_DT', 'Recall\_DT', 'F\_Score\_DT',...
+'Precision\_NN', 'Recall\_NN', 'F\_Score\_NN');
+legend('Location', 'eastoutside');
+set(gcf, 'Units', 'Normalized', 'OuterPosition', [0, 0.04, 1, 0.96]);
+
+% Saves Overall graph
+savepath = strcat(outputPath,"\Overall_Graph.png");
+saveas(fig,savepath,'png'); 
+hold off;
+
+fixed_col_names = {'Precision\_SVM', 'Recall\_SVM', 'F\_Score\_SVM', 'Precision\_DT', 'Recall\_DT', 'F\_Score\_DT',...
+'Precision\_NN', 'Recall\_NN', 'F\_Score\_NN'};
+for i = 1 : length(col_names)
+    
+    % Graphs data
+    y = data_table.(i);
+    fig = plot(x, y);
+    hold on;
+    title(strcat(fixed_col_names{i},' Across Users'));
+    legend('hide');
+    set(gcf, 'Units', 'Normalized', 'OuterPosition', [0, 0.04, 1, 0.96]);
+    hold off;
+    % Saves the graph
+    savepath = strcat(outputPath,"\",col_names{i},".png");
+    saveas(fig,savepath,'png'); 
+end
