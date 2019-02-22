@@ -59,52 +59,26 @@ data_table = array2table(data_table, 'RowNames',row_names ,'VariableNames' ,col_
 % saveas(fig,savepath,'png'); 
 % hold off;
 
-x = categorical(user_list);
+SVM_names = {'Precision\_SVM', 'Recall\_SVM', 'F\_Score\_SVM'};
+DT_names = {'Precision\_DT', 'Recall\_DT', 'F\_Score\_DT'};
+NN_names = {'Precision\_NN', 'Recall\_NN', 'F\_Score\_NN'};
+
 % Plot SVM data across users
-for i = 1 : 3
+for i = 1 : length(SVM_names)
     y = data_table.(i);
     fig = plot(x, y);
     hold on;
+    title(strcat(fixed_col_names{i},' Across Users'));
+    legend('hide');
+    set(gcf, 'Units', 'Normalized', 'OuterPosition', [0, 0.04, 1, 0.96]);
+    hold off;
+    % Saves the graph
+    
 end
-
-title('SVM Data Across Users');
-legend('Precision\_SVM', 'Recall\_SVM', 'F\_Score\_SVM');
-legend('Location', 'eastoutside');
-set(gcf, 'Units', 'Normalized', 'OuterPosition', [0, 0.04, 1, 0.96]);
-% Saves SVM graph
-savepath = strcat(outputPath,"\SVM_Data.png");
+% Saves S
+savepath = strcat(outputPath,"\",col_names{i},".png");
 saveas(fig,savepath,'png');
-hold off;
-
-% Plot DT data across users
-for i = 4 : 6 
-    y = data_table.(i);
-    fig = plot(x, y);
-    hold on;
-end
-title('Decision Tree Data Across Users');
-legend('Precision\_DT', 'Recall\_DT', 'F\_Score\_DT');
-legend('Location', 'eastoutside');
-set(gcf, 'Units', 'Normalized', 'OuterPosition', [0, 0.04, 1, 0.96]);
-% Saves DT graph
-savepath = strcat(outputPath,"\DT_Data.png");
-saveas(fig,savepath,'png');
-hold off;
-% Plot NN data across users
-for i = 7 : 9 
-    y = data_table.(i);
-    fig = plot(x, y);
-    hold on;
-end
-
-title('Neural Network Data Across Users');
-legend('Precision\_NN', 'Recall\_NN', 'F\_Score\_NN');
-legend('Location', 'eastoutside');
-set(gcf, 'Units', 'Normalized', 'OuterPosition', [0, 0.04, 1, 0.96]);
-% Saves DT graph
-savepath = strcat(outputPath,"\NN_Data.png");
-saveas(fig,savepath,'png');
-hold off;
+    
 % Old code to graph individual columns
 % for i = 1 : length(col_names)
 %     
