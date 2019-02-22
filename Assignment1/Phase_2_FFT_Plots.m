@@ -1,0 +1,74 @@
+clear all 
+clc
+close all
+
+scriptPath = pwd;
+dataPath = strcat(scriptPath,'\Phase_2_Data\SVD');
+inputList = ls(dataPath);
+
+outputPath = strcat(scriptPath,'\Phase_2_Data\Graphs\FFT');
+phase3DataPathEat = strcat(scriptPath,'\Phase_3_Data\Eat');
+phase3DataPathNotEat = strcat(scriptPath,'\Phase_3_Data\Not_Eat');
+mkdir(outputPath);
+mkdir(phase3DataPathEat);
+mkdir(phase3DataPathNotEat);
+
+%Path to Myo Data
+myoPath = strcat(scriptPath,'\MyoData');
+% Removes the '.' and '..' directories from list
+inputList = inputList(3:end,:);
+
+%Converts inputList into a cell array of character vectors
+inputList = cellstr(inputList);
+%Loads coeffs and content from files
+coeffsData = inputList(contains(inputList,'Coeffs'));
+contentData = inputList(contains(inputList,'Content'));
+
+% This is for keeping track of the the user number when we write out files
+userNums = ls(myoPath);
+userNums = userNums(3:end,:);
+
+load(strcat(dataPath,'\',contentData{1}));
+load(strcat(dataPath,'\',contentData{2}));
+load(strcat(dataPath,'\',contentData{3}));
+load(strcat(dataPath,'\',contentData{4}));
+
+forkEatFFT = abs(fft(Users_Fork_Eat_Content));
+% forkEatFFT = norm(forkEatFFT);
+% forkEatFFT = sort(forkEatFFT,'descend');
+% forkEatFFT = forkEatFFT(:,1:5);
+
+forkNotEatFFT = abs(fft(Users_Fork_NotEat_Content));
+% forkNotEatFFT = norm(forkNotEatFFT);
+% [forkNotEatFFT,forkEatIndices] = (sort(forkNotEatFFT,'descend'));
+% forkNotEatFFT = forkNotEatFFT(:,1:5);
+save(fullfile(phase3DataPathEat, strcat('\Fork_FFT_Eat.mat')),'forkEatFFT');
+save(fullfile(phase3DataPathNotEat, strcat('\Fork_FFT_NotEat.mat')),'forkNotEatFFT');
+
+columnTitles = ["ori_x","ori_y","ori_z","ori_w","accel_x","accel_y","accel_z","gyro_x","gyro_y","gyro_z","emg_1","emg_2","emg_3","emg_4","emg_5","emg_6","emg_7","emg_8"];
+legend(columnTitles);
+
+users = [];
+
+for i = 1 : size(userNums, 1)
+    % Adds the users to a string array for later use
+    users = [users;convertCharsToStrings(userNums(i,:))];
+end
+
+users = categorical(users);
+labels = ["Eating Data", "Non-Eating Data"];
+
+for i = 1 : size(forkEatFFT, 1)
+    ori_z_eat = forkEatFFT(:,i);
+    ori_z_not_eat = forkNotEatFFT(:,i);
+    fig = plot(users,ori_z_eat,'r-');
+    hold on;
+    fig = plot(users,ori_z_not_eat,'b-');
+    title(strcat(upper(columnTitles{i}), " FFT"));
+    legend(labels);
+    legend('Location', 'eastoutside');
+    set(gcf, 'Units', 'Normalized', 'OuterPosition', [0, 0.04, 1, 0.96]);
+    hold off;
+    savepath = strcat(outputPath,"\",columnTitles{i},"_fft.png");
+    saveas(fig,savepath,'png'); 
+end
